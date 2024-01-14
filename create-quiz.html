@@ -2,34 +2,37 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles/app.css">
+  <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   <title>My Quiz</title>
 </head>
 <body>
-  <h1>Create Quiz</h1>
-  
-  <input type="text" placeholder="Name">
-  <input type="text" placeholder="Description">
-  <input type="text" placeholder="Tags">
-  <input type="text" placeholder="Note">
+  <div class="quiz">
+    <h1>Create Quiz</h1>
+    
+    <label>Name</label>
+    <input id="quiz-name" type="text" placeholder="Name">
+    <label>Description</label>
+    <input id="quiz-description" type="text" placeholder="Description">
+    <label>Tags</label>
+    <input id="quiz-tags" type="text" placeholder="Tags">
+    <label>Note</label>
+    <input id="quiz-notes" type="text" placeholder="Note">
+    <label>Image</label>
+    <input id="quiz-image" type="text" placeholder="Image">
 
-  <h2>Questions</h2>
-  <div id="questions">
-    <div class="question">
-      <input type="text" placeholder="Question">
-
-      <h3>Options</h3>
-      <div class="options">
-        <div class="option">
-          <input type="text" placeholder="Option">
-        </div>
-
-        <button id="add-option">Add Option</button>
-      </div>
-    </div>
-
+    <h2>Questions</h2>
+    <div id="questions"></div>
     <button id="add-question">Add Question</button>
+    <div>
+      <a href="/" id="cancel">Cancel</a>
+      <button id="save">Save</button>
+    </div>
   </div>
   
-  <script src="script.js"></script>
+  <script src="src/Option.js"></script>
+  <script src="src/Question.js"></script>
+  <script src="src/Quiz.js"></script>
+  <script src="src/createQuiz.js"></script>
 </body>
 </html>
