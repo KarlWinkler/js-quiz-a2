@@ -11,3 +11,13 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
 }
+
+.correct {
+    background-color: #25db4f;
+    border-color: #c3e6cb;
+}
+
+.incorrect {
+    background-color: #d84955;
+    border-color: #f5c6cb;
+}

@@ -14,12 +14,13 @@ window.onload = ("DOMContentLoaded", () => {
   quizList.forEach(quiz => {
     displayQuiz(quiz);
   });
-
 });
 
 function displayQuiz(quiz) {
   const quizList = document.querySelector("#quiz-list");
+  const setQuiz = setCurrentQuiz.bind(quiz.id);
 
+  console.log(setQuiz);
   const newQuiz = document.createElement("div");
   newQuiz.classList.add(`quiz-${quiz.id}`, "quiz");
   newQuiz.innerHTML = `
@@ -27,8 +28,15 @@ function displayQuiz(quiz) {
     <p>${quiz.description}</p>
     <p>${quiz.questions.length} questions</p>
     <p>${quiz.updatedAt}</p>
-    <a href="quiz?id=${quiz.id}">Take Quiz</a>
+    <button>Take Quiz</button>
   `;
+  newQuiz.querySelector("button").onclick = setQuiz;
 
   quizList.appendChild(newQuiz);
+}
+
+function setCurrentQuiz() {
+  localStorage.setItem("current-quiz", this);
+
+  window.location.href = "/quiz";
 }

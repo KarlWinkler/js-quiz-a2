@@ -50,6 +50,11 @@ class Quiz {
     this.createdAt = quiz.createdAt;
   }
 
+  updateScore(correct) {
+    if (correct) { this.score++ }
+    this.save();
+  }
+
   static load(id) {
     const quiz = JSON.parse(localStorage.getItem(`quiz-${id}`));
     if (!quiz) return null;

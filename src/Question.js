@@ -31,16 +31,20 @@ class Question {
     localStorage.setItem(`question-${this.id}`, JSON.stringify(this));
   }
 
+  setData(question) {
+    this.id = question.id;
+    this.questionText = question.questionText;
+    this.options = question.options;
+    this.correctAnswer = question.correctAnswer;
+  }
+
   static load(id) {
     const question = JSON.parse(localStorage.getItem(`question-${id}`));
     if (!question) return null;
 
     let newQuestion = new Question();
 
-    newQuestion.id = question.id;
-    newQuestion.questionText = question.questionText;
-    newQuestion.options = question.options;
-    newQuestion.correctAnswer = question.correctAnswer;
+    newQuestion.setData(question);
 
     return newQuestion;    
   }
