@@ -13,6 +13,7 @@ class Option {
     }
 
     localStorage.setItem(`option-${this.id}`, JSON.stringify(this));
+    return this;
   }
 
   static load(id) {

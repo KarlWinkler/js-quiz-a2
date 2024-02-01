@@ -1,11 +1,11 @@
 class Question {
   static id = localStorage.getItem("question-id") || 0;
 
-  constructor() {
+  constructor(questionText, options, correctAnswer) {
     this.id = null;
-    this.questionText = "";
-    this.options = [];
-    this.correctAnswer = null;
+    this.questionText = questionText || "";
+    this.options = options || [];
+    this.correctAnswer = correctAnswer || null;
   }
 
   addOption(option) {
@@ -29,6 +29,7 @@ class Question {
     }
 
     localStorage.setItem(`question-${this.id}`, JSON.stringify(this));
+    return this;
   }
 
   setData(question) {

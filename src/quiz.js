@@ -93,19 +93,20 @@ function renderResult(response) {
     <h3>${this.questionText}</h3>
     <div class="options">
       ${this.options.map(option => {
-        let id = option.id.toString();
-        if (id === this.correctAnswer && response.value === id) {
+        const id = option.id.toString();
+        const responseValue = response.value?.toString();
+        const correctAnswer = this.correctAnswer?.toString();
+
+        if (id === correctAnswer && responseValue === id) {
           return `
             <div class="option-${id} option correct">
-              <input type="radio" name="question-${this.id}" id="option-${id}" value="${id}">
               <label for="option-${id}">${option.value}</label>
             </div>
           `
         }
-        else if (response.value === id) {
+        else if (responseValue === id) {
           return `
             <div class="option-${id} option incorrect">
-              <input type="radio" name="question-${this.id}" id="option-${id}" value="${id}">
               <label for="option-${id}">${option.value}</label>
             </div>
           `
@@ -113,7 +114,6 @@ function renderResult(response) {
         else {
           return `
             <div class="option-${id} option">
-              <input type="radio" name="question-${this.id}" id="option-${id}" value="${id}">
               <label for="option-${id}">${option.value}</label>
             </div>
           `

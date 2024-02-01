@@ -9,11 +9,35 @@ window.onload = ("DOMContentLoaded", () => {
 
   newQuestion.call(firstQuestion);
 
+  document.querySelector("#import").addEventListener("click", async () => {
+    console.log("click");
+    const questionsResponse = await fetch("https://opentdb.com/api.php?amount=1");
+    const questions = await questionsResponse.json();
+
+    questions.results.forEach(question => {
+      options = [];
+      const correctAnswer = new Option(question.correct_answer.trim()).save();
+      options.push(correctAnswer);
+      console.log(correctAnswer);
+
+      question.incorrect_answers.forEach(incorrectAnswer => {
+        options.push(new Option(incorrectAnswer.trim()).save());
+      });
+
+      const inputQuestion = new Question(question.question, options, correctAnswer.id).save();
+      quiz.addQuestion(inputQuestion);
+      newQuestion.call(inputQuestion);
+    });
+    console.log(questions.results);
+  });
+
   document.querySelector("#add-question").addEventListener("click", () => {
     let question = new Question();
     quiz.addQuestion(question);
   
     question.save();
+    let option = new Option().save();
+    question.addOption(option);
   
     newQuestion.call(question);
   });
@@ -77,7 +101,7 @@ window.onload = ("DOMContentLoaded", () => {
     newQuestion.classList.add(`question-${this.id}`, "question");
     newQuestion.innerHTML = `
       <label>Question</label>
-      <input type="text" placeholder="Question">
+      <input type="text" value="${this.questionText}" placeholder="Question">
 
       <h3>Options</h3>
       <div class="options">
@@ -87,11 +111,11 @@ window.onload = ("DOMContentLoaded", () => {
 
     questions.appendChild(newQuestion);
 
-    let option = new Option();
-    option.save();
-    this.addOption(option);
+    // console.log(this.options)
 
-    newOption.call(option, this.id);
+    this.options.forEach(option => {
+      newOption.call(option, this.id);
+    });
   }
 
   function newOption(questionID) {
@@ -104,7 +128,7 @@ window.onload = ("DOMContentLoaded", () => {
     option.innerHTML = `
       <input type="radio" name="correct-answer-${questionID}" id="${this.id}">
       <label value="${this.id}">Value</label>
-      <input type="text" placeholder="Value">
+      <input type="text" value="${this.value}" placeholder="Value">
     `;
 
     options.insertBefore(option, document.querySelector(`.question-${questionID} #add-option`));
