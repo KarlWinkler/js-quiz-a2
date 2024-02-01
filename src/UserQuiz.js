@@ -1,22 +1,29 @@
 class UserQuiz {
-  static id = localStorage.getItem("user-quiz-id") || 0;
+  static id = localStorage.getItem("userquiz-id") || 0;
 
-  constructor(value) {
+  constructor(score = 0, quiz = null) {
     this.id = null;
-    this.value = value;
+    this.score = score;
+    this.quiz = quiz;
+  }
+
+  updateScore(correct) {
+    if (correct) { this.score++ }
+    this.save();
   }
 
   save() {
     if (!this.id) {
       this.id = ++UserQuiz.id;
-      localStorage.setItem("user-quiz-id", UserQuiz.id);
+      localStorage.setItem("userquiz-id", UserQuiz.id);
     }
 
-    localStorage.setItem(`user-quiz-${this.id}`, JSON.stringify(this));
+    localStorage.setItem(`userquiz-${this.id}`, JSON.stringify(this));
+    return this;
   }
 
   static load(id) {
-    const userQuiz = JSON.parse(localStorage.getItem(`user-quiz-${id}`));
+    const userQuiz = JSON.parse(localStorage.getItem(`userquiz-${id}`));
     if (!userQuiz) return null;
 
     let newUserQuiz = new UserQuiz();

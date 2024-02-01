@@ -22,7 +22,6 @@ window.onload = ("DOMContentLoaded", () => {
     quiz.updateScore(selectedOption == question?.correctAnswer);
 
     res = questionsGenerator.next({value: selectedOption});
-    console.log(res);
     quizContainer.innerHTML = "";
     quizContainer.append(res.value);
   });
@@ -32,9 +31,14 @@ window.onload = ("DOMContentLoaded", () => {
 
     const quizContainer = document.querySelector(".quiz");
     res = questionsGenerator.next();
-    console.log(res);
-    quizContainer.innerHTML = "";
-    quizContainer.append(res.value);
+    if (res.done) {
+      let quiz = Quiz.load(localStorage.getItem("current-quiz"));
+      quiz.save();
+      window.location.href = "index.html";
+    } else {
+      quizContainer.innerHTML = "";
+      quizContainer.append(res.value);
+    }
   });
 });
 

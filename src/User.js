@@ -1,9 +1,34 @@
 class User {
   static id = localStorage.getItem("user-id") || 0;
 
-  constructor(username) {
+  constructor(username = "anonymous") {
     this.id = null;
     this.username = username;
+  }
+
+  // finds existing user or creates a new one
+  // then sets the current user
+  login(username) {
+    for (let key in localStorage) {
+      if (key.includes("user-")) {
+        const user = JSON.parse(localStorage.getItem(key));
+        if (user.username === username) {
+          this.id = user.id;
+          this.username = user.username;
+          this.setCurrentUser();
+          return this;
+        }
+      }
+    };
+
+    this.username = username;
+    this.save();
+    this.setCurrentUser();
+    return this;
+  }
+
+  setCurrentUser() {
+    localStorage.setItem("current-user", this.id);
   }
 
   save() {

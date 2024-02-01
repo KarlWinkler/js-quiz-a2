@@ -1,7 +1,7 @@
 class Option {
   static id = localStorage.getItem("option-id") || 0;
 
-  constructor(value) {
+  constructor(value = "") {
     this.id = null;
     this.value = value;
   }

@@ -10,7 +10,6 @@ window.onload = ("DOMContentLoaded", () => {
     quizList.push(quiz);
   }
 
-
   quizList.forEach(quiz => {
     displayQuiz(quiz);
   });

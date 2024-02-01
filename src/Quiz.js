@@ -1,14 +1,14 @@
 class Quiz {
   static id = localStorage.getItem("quiz-id") || 0;
 
-  constructor() {
+  constructor(questions = [], score = 0, description = "", notes = "", image = "", name = "") {
     this.id = null;
-    this.questions = [];
-    this.score = 0;
-    this.description = "";
-    this.notes = "";
-    this.image = "";
-    this.name = "";
+    this.questions = questions;
+    this.score = score;
+    this.description = description;
+    this.notes = notes;
+    this.image = image;
+    this.name = name;
     this.updatedAt = new Date();
     this.createdAt = new Date();
   }
@@ -36,6 +36,7 @@ class Quiz {
     }
 
     localStorage.setItem(`quiz-${this.id}`, JSON.stringify(this));
+    return this;
   }
 
   setData(quiz) {
@@ -48,11 +49,6 @@ class Quiz {
     this.name = quiz.name;
     this.updatedAt = quiz.updatedAt;
     this.createdAt = quiz.createdAt;
-  }
-
-  updateScore(correct) {
-    if (correct) { this.score++ }
-    this.save();
   }
 
   static load(id) {
