@@ -1,11 +1,12 @@
 class Quiz {
   static id = localStorage.getItem("quiz-id") || 0;
 
-  constructor(questions = [], score = 0, description = "", notes = "", image = "", name = "") {
+  constructor(questions = [], score = 0, description = "", tags = "", notes = "", image = "", name = "") {
     this.id = null;
     this.questions = questions;
     this.score = score;
     this.description = description;
+    this.tags = tags;
     this.notes = notes;
     this.image = image;
     this.name = name;
@@ -24,6 +25,12 @@ class Quiz {
       this.questions.push(question);
     }
 
+    this.save();
+  }
+
+  removeQuestion(question) {
+    const index = this.questions.findIndex(q => q.id === question.id);
+    this.questions.splice(index, 1);
     this.save();
   }
 

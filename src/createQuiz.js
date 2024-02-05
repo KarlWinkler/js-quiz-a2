@@ -1,24 +1,40 @@
 window.onload = ("DOMContentLoaded", () => {
-  let quiz = new Quiz();
-  quiz.save();
+  const currentQuiz = localStorage.getItem("current-quiz");
+  let quiz = currentQuiz ? Quiz.load(currentQuiz) : new Quiz().save();
+
+  if (currentQuiz) {
+    const quiz = Quiz.load(currentQuiz);
+    document.querySelector("#quiz-name").value = quiz.name;
+    document.querySelector("#quiz-description").value = quiz.description;
+    document.querySelector("#quiz-tags").value = quiz.tags;
+    document.querySelector("#quiz-notes").value = quiz.notes;
+    document.querySelector("#quiz-image").value = quiz.image;
+
+    document.querySelector("h1").innerHTML = `Edit Quiz (${quiz.name})`;
+  }
+  else {
+    let firstQuestion = new Question();
+    firstQuestion.save();
+    quiz.addQuestion(firstQuestion);
+  }
+  
   document.querySelector(".quiz").value = quiz.id;
 
-  let firstQuestion = new Question();
-  firstQuestion.save();
-  quiz.addQuestion(firstQuestion);
-
-  newQuestion.call(firstQuestion);
+  for (const q in quiz.questions) {
+    const question = Question.load(quiz.questions[q].id);
+    newQuestion.call(question);
+  }
 
   document.querySelector("#import").addEventListener("click", async () => {
     console.log("click");
-    const questionsResponse = await fetch("https://opentdb.com/api.php?amount=1");
+    const amount = document.querySelector("#amount").value;
+    const questionsResponse = await fetch(`https://opentdb.com/api.php?amount=${amount}`);
     const questions = await questionsResponse.json();
 
     questions.results.forEach(question => {
       options = [];
       const correctAnswer = new Option(question.correct_answer.trim()).save();
       options.push(correctAnswer);
-      console.log(correctAnswer);
 
       question.incorrect_answers.forEach(incorrectAnswer => {
         options.push(new Option(incorrectAnswer.trim()).save());
@@ -43,16 +59,24 @@ window.onload = ("DOMContentLoaded", () => {
   });
 
   document.querySelector("#questions").addEventListener("click", (e) => {
-    if (e.target.id !== "add-option") return;
+    if (e.target.id === "add-option") {
+      const questionID = e.target.parentElement.parentElement.classList[0].split("-")[1];
+      let option = new Option();
+      option.save();
 
-    const questionID = e.target.parentElement.parentElement.classList[0].split("-")[1];
-    let option = new Option();
-    option.save();
+      let question = Question.load(questionID);
+      question.addOption(option);
 
-    let question = Question.load(questionID);
-    question.addOption(option);
+      newOption.call(option, questionID);
+    }
 
-    newOption.call(option, questionID);
+    if (e.target.id === "remove-question") {
+      const questionElement = e.target.closest(".question");
+      const questionId = questionElement.classList[0].split("-")[1];
+      let question = Question.load(questionId);
+      quiz.removeQuestion(question);
+      questionElement.remove();
+    }
   });
 
   document.querySelector("#save").addEventListener("click", () => {
@@ -102,7 +126,7 @@ window.onload = ("DOMContentLoaded", () => {
     newQuestion.innerHTML = `
       <label>Question</label>
       <input type="text" value="${this.questionText}" placeholder="Question">
-
+      <button id="remove-question">Remove Question</button>
       <h3>Options</h3>
       <div class="options">
         <button id="add-option">Add Option</button>
@@ -114,23 +138,24 @@ window.onload = ("DOMContentLoaded", () => {
     // console.log(this.options)
 
     this.options.forEach(option => {
-      newOption.call(option, this.id);
+      newOption.call(option, this);
     });
   }
 
-  function newOption(questionID) {
+  function newOption(question) {
     // this is an Option object
 
-    const options = document.querySelector(`.question-${questionID} .options`);
+    const options = document.querySelector(`.question-${question.id} .options`);
+    const correctAnswer = this.id == question.correctAnswer;
 
     const option = document.createElement("div");
     option.classList.add("option");
     option.innerHTML = `
-      <input type="radio" name="correct-answer-${questionID}" id="${this.id}">
+      <input type="radio" name="correct-answer-${question.id}" id="${this.id}" ${correctAnswer ? "checked" : ""}>
       <label value="${this.id}">Value</label>
       <input type="text" value="${this.value}" placeholder="Value">
     `;
 
-    options.insertBefore(option, document.querySelector(`.question-${questionID} #add-option`));
+    options.insertBefore(option, document.querySelector(`.question-${question.id} #add-option`));
   }
 });

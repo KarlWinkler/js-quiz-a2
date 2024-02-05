@@ -18,8 +18,8 @@ window.onload = ("DOMContentLoaded", () => {
     res = questionsGenerator.next();
 
     let selectedOption = document.querySelector("input:checked") ? document.querySelector("input:checked").value : null;
-    let quiz = Quiz.load(localStorage.getItem("current-quiz"));
-    quiz.updateScore(selectedOption == question?.correctAnswer);
+    let userQuiz = UserQuiz.load(localStorage.getItem("current-userquiz"));
+    userQuiz.updateScore(selectedOption == question?.correctAnswer);
 
     res = questionsGenerator.next({value: selectedOption});
     quizContainer.innerHTML = "";
@@ -32,9 +32,7 @@ window.onload = ("DOMContentLoaded", () => {
     const quizContainer = document.querySelector(".quiz");
     res = questionsGenerator.next();
     if (res.done) {
-      let quiz = Quiz.load(localStorage.getItem("current-quiz"));
-      quiz.save();
-      window.location.href = "index.html";
+      window.location.href = "done.html";
     } else {
       quizContainer.innerHTML = "";
       quizContainer.append(res.value);

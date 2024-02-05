@@ -9,7 +9,7 @@ class User {
   // finds existing user or creates a new one
   // then sets the current user
   login(username) {
-    for (let key in localStorage) {
+    for (const key in localStorage) {
       if (key.includes("user-")) {
         const user = JSON.parse(localStorage.getItem(key));
         if (user.username === username) {

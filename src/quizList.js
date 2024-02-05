@@ -17,25 +17,37 @@ window.onload = ("DOMContentLoaded", () => {
 
 function displayQuiz(quiz) {
   const quizList = document.querySelector("#quiz-list");
-  const setQuiz = setCurrentQuiz.bind(quiz.id);
+  const startQuiz = startCurrentQuiz.bind(quiz.id);
+  const editQuiz = editCurrentQuiz.bind(quiz.id);
 
-  console.log(setQuiz);
   const newQuiz = document.createElement("div");
   newQuiz.classList.add(`quiz-${quiz.id}`, "quiz");
   newQuiz.innerHTML = `
+    <img src="${quiz.image}" alt="${quiz.name}">
     <h2>${quiz.name}</h2>
     <p>${quiz.description}</p>
     <p>${quiz.questions.length} questions</p>
     <p>${quiz.updatedAt}</p>
-    <button>Take Quiz</button>
+    <button class="take">Take Quiz</button>
+    <button class="edit">Edit Quiz</button>
   `;
-  newQuiz.querySelector("button").onclick = setQuiz;
+  newQuiz.querySelector(".take").onclick = startQuiz;
+  newQuiz.querySelector(".edit").onclick = editQuiz;
 
   quizList.appendChild(newQuiz);
 }
 
-function setCurrentQuiz() {
+function startCurrentQuiz() {
   localStorage.setItem("current-quiz", this);
+  let user = localStorage.getItem("current-user")
 
+  let userQuiz = UserQuiz.find(user, this);
+
+  localStorage.setItem("current-userquiz", userQuiz.id);
   window.location.href = "/quiz";
+}
+
+function editCurrentQuiz() {
+  localStorage.setItem("current-quiz", this);
+  window.location.href = "/create-quiz";
 }
