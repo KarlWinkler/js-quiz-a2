@@ -6,6 +6,10 @@ class Option {
     this.value = value;
   }
 
+  delete() {
+    localStorage.removeItem(`option-${this.id}`);
+  }
+
   save() {
     if (!this.id) {
       this.id = ++Option.id;

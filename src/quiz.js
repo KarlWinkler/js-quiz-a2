@@ -3,16 +3,12 @@ window.onload = ("DOMContentLoaded", () => {
   
   const questionsGenerator = getQuestion();
   res = questionsGenerator.next();
-  console.log(res);
   quizContainer.append(res.value);
 
   document.querySelector(".quiz").addEventListener("click", (e) => {
     if (e.target.id !== "submit") return;
-    console.log(document.querySelector(".question").classList[0].split("-"))
-    console.log(JSON.parse(localStorage.getItem(`question-${document.querySelector(".question").classList[0].split("-")[1]}`)))
 
     let question = Question.load(document.querySelector(".question").classList[0].split("-")[1]);
-    // console.log(question)
 
     const quizContainer = document.querySelector(".quiz");
     res = questionsGenerator.next();
@@ -42,21 +38,40 @@ window.onload = ("DOMContentLoaded", () => {
 
 function* getQuestion() {
   const quiz = Quiz.load(localStorage.getItem("current-quiz"));
+  let userQuiz = UserQuiz.load(localStorage.getItem("current-userquiz"));
+
   let question = new Question();
   
   let i = 0;
   while (i < quiz.questions.length) {
     console.log(i);
     question.setData(quiz.questions[i]);
-    yield renderQuestion.call(question);
+
+    userQuiz = UserQuiz.load(localStorage.getItem("current-userquiz"));
+    userQuiz.currentQuestion = question.id;
+    userQuiz.save();
+
+    const options = getOptions(question);
+
+    yield renderQuestion.apply(question, [options]);
     let response = yield "response";
-    console.log(response);
-    yield renderResult.call(question, response);
+    userQuiz = UserQuiz.load(localStorage.getItem("current-userquiz"));
+    userQuiz.answeredQuestions.push(question.id);
+    userQuiz.save();
+
+    yield renderResult.apply(question, [response, options]);
     i++;
   }
 }
 
-function renderQuestion() {
+function getOptions(question) {
+  let options = question.options;
+  options = options.sort(() => Math.random() - 0.5);
+
+  return options;
+}
+
+function renderQuestion(options) {
   // this is a Question object
 
   const question = document.createElement("div");
@@ -64,7 +79,7 @@ function renderQuestion() {
   question.innerHTML = `
     <h3>${this.questionText}</h3>
     <div class="options">
-      ${renderOptions.call(this)}
+      ${renderOptions.call(options)}
     </div>
     <button id="submit">Submit Question</button>
   `;
@@ -73,8 +88,7 @@ function renderQuestion() {
 }
 
 function renderOptions() {
-  console.log(this);
-  let optionElements = this.options.map(option => (
+  let optionElements = this.map(option => (
     `
       <div class="option-${option.id} option">
         <input type="radio" name="question-${this.id}" id="option-${option.id}" value="${option.id}">

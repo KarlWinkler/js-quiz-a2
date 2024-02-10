@@ -22,6 +22,14 @@ class Question {
     this.save();
   }
 
+  delete() {
+    for (let i = 0; i < this.options.length; i++) {
+      Option.load(this.options[i].id).delete();
+    }
+
+    localStorage.removeItem(`question-${this.id}`);
+  }
+
   save() {
     if (!this.id) {
       this.id = ++Question.id;

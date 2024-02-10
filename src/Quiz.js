@@ -34,6 +34,14 @@ class Quiz {
     this.save();
   }
 
+  delete() {
+    for (let i = 0; i < this.questions.length; i++) {
+      Question.load(this.questions[i].id).delete();
+    }
+
+    localStorage.removeItem(`quiz-${this.id}`);
+  }
+
   save() {
     this.updatedAt = new Date();
 

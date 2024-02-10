@@ -23,11 +23,12 @@ function displayQuiz(quiz) {
   const newQuiz = document.createElement("div");
   newQuiz.classList.add(`quiz-${quiz.id}`, "quiz");
   newQuiz.innerHTML = `
-    <img src="${quiz.image}" alt="${quiz.name}">
+    <img class="quiz-image" src="${quiz.image}" alt="${quiz.name} image">
     <h2>${quiz.name}</h2>
     <p>${quiz.description}</p>
     <p>${quiz.questions.length} questions</p>
     <p>${quiz.updatedAt}</p>
+    ${displayQuizScore(quiz)}
     <button class="take">Take Quiz</button>
     <button class="edit">Edit Quiz</button>
   `;
@@ -41,13 +42,34 @@ function startCurrentQuiz() {
   localStorage.setItem("current-quiz", this);
   let user = localStorage.getItem("current-user")
 
-  let userQuiz = UserQuiz.find(user, this);
-
+  let userQuiz = UserQuiz.findOrCreate(user, this);
   localStorage.setItem("current-userquiz", userQuiz.id);
+  userQuiz.currentScore = 0;
+  userQuiz.save();
+
+  console.log(userQuiz);
+
   window.location.href = "/quiz";
 }
 
 function editCurrentQuiz() {
   localStorage.setItem("current-quiz", this);
   window.location.href = "/create-quiz";
+}
+
+function displayQuizScore(quiz) {
+  let currentUser = localStorage.getItem("current-user");
+  console.log(currentUser);
+
+  if (currentUser) {
+    return `<p>${getUserQuizScore(quiz, currentUser)}/${quiz.questions.length}</p>`;
+  }
+  return "";
+}
+
+function getUserQuizScore(quiz, user) {
+  let userQuiz = UserQuiz.find(user, quiz.id);
+  console.log(userQuiz);
+
+  return userQuiz?.highestScore() || 0;
 }

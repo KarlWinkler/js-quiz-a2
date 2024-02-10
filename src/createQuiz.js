@@ -116,6 +116,12 @@ window.onload = ("DOMContentLoaded", () => {
     document.location.href = '/';
   });
 
+  document.getElementById("delete").addEventListener("click", () => {
+    quiz.delete();
+
+    document.location.href = '/';
+  });
+
   function newQuestion() {
     // this is a Question object
 

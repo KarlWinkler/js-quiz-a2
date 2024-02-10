@@ -3,8 +3,9 @@ window.onload = ("DOMContentLoaded", () => {
   userQuiz = UserQuiz.load(localStorage.getItem("current-userquiz"));
 
   let score = document.createElement("p");
-  score.innerHTML = `Your score is: ${userQuiz.score}/${quiz.questions.length}`;
+  score.innerHTML = `Your score is: ${userQuiz.currentScore}/${quiz.questions.length}`;
 
   container = document.querySelector("#done");
   container.append(score);
+  userQuiz .complete();
 });
