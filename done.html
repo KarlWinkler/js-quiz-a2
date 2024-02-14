@@ -2,11 +2,32 @@
 <html>
   <head>
     <title>Done</title>
+
+    <link rel="stylesheet" href="styles/app.css">
+    <link rel="stylesheet" href="styles/nav.css">
+    <link rel="stylesheet" href="styles/done.css">
+
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   </head>
   <body>
-    <div id="done"></div>
+    <div class="nav">
+      <div class="nav-links">
+        <a class="button" href="/">Home</a>
+        <a class="button" href="quiz-list">Quiz List</a>
+        <a class="button" id="create-quiz" href="create-quiz">Create Quiz</a>
+      </div>
+      <div class="nav-user">
+        <span id="user">Guest</span>
+        <a class="button" id="nav-login">Log In</a>
+      </div>
+    </div>
 
-    <a href="/">Home</a>
+    <div id="done" class="content">
+      <div class="form-buttons">
+        <a class="button button-secondary" href="quiz-list">Take Another</a>
+        <a class="button button-secondary" href="home">Home</a>
+      </div>
+    </div>
 
     <script src="src/Quiz.js"></script>
     <script src="src/UserQuiz.js"></script>

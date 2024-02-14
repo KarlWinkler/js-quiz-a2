@@ -1,11 +1,12 @@
 class Question {
   static id = localStorage.getItem("question-id") || 0;
 
-  constructor(questionText = "", options = [], correctAnswer = null) {
+  constructor(questionText = "", options = [], correctAnswer = null, difficulty = 0) {
     this.id = null;
     this.questionText = questionText;
     this.options = options;
     this.correctAnswer = correctAnswer;
+    this.difficulty = difficulty;
   }
 
   addOption(option) {
@@ -40,11 +41,16 @@ class Question {
     return this;
   }
 
+  difficultyString() {
+    return this.difficulty == 0 ? "easy" : this.difficulty == 1 ? "medium" : "hard";
+  }
+
   setData(question) {
     this.id = question.id;
     this.questionText = question.questionText;
     this.options = question.options;
     this.correctAnswer = question.correctAnswer;
+    this.difficulty = question.difficulty;
   }
 
   static load(id) {

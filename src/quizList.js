@@ -1,4 +1,4 @@
-window.onload = ("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   let quizList = [];
 
   numberOfQuizzes = localStorage.getItem("quiz-id") || 0;
@@ -22,15 +22,18 @@ function displayQuiz(quiz) {
 
   const newQuiz = document.createElement("div");
   newQuiz.classList.add(`quiz-${quiz.id}`, "quiz");
+  newQuiz.title = quiz.notes;
   newQuiz.innerHTML = `
-    <img class="quiz-image" src="${quiz.image}" alt="${quiz.name} image">
+    <img class="quiz-image" src="${quiz.image || "../images/unnamed.png"}" alt="${quiz.name} image">
     <h2>${quiz.name}</h2>
     <p>${quiz.description}</p>
     <p>${quiz.questions.length} questions</p>
     <p>${quiz.updatedAt}</p>
     ${displayQuizScore(quiz)}
-    <button class="take">Take Quiz</button>
-    <button class="edit">Edit Quiz</button>
+    <div class="form-buttons">
+      <button class="edit button button-tertiary">Edit Quiz</button>
+      <button class="take button">Take Quiz</button>
+    </div>
   `;
   newQuiz.querySelector(".take").onclick = startQuiz;
   newQuiz.querySelector(".edit").onclick = editQuiz;
@@ -47,8 +50,6 @@ function startCurrentQuiz() {
   userQuiz.currentScore = 0;
   userQuiz.save();
 
-  console.log(userQuiz);
-
   window.location.href = "/quiz";
 }
 
@@ -59,7 +60,6 @@ function editCurrentQuiz() {
 
 function displayQuizScore(quiz) {
   let currentUser = localStorage.getItem("current-user");
-  console.log(currentUser);
 
   if (currentUser) {
     return `<p>${getUserQuizScore(quiz, currentUser)}/${quiz.questions.length}</p>`;
@@ -69,7 +69,6 @@ function displayQuizScore(quiz) {
 
 function getUserQuizScore(quiz, user) {
   let userQuiz = UserQuiz.find(user, quiz.id);
-  console.log(userQuiz);
 
   return userQuiz?.highestScore() || 0;
 }

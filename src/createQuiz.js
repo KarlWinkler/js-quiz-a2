@@ -31,6 +31,8 @@ window.onload = ("DOMContentLoaded", () => {
     const questionsResponse = await fetch(`https://opentdb.com/api.php?amount=${amount}`);
     const questions = await questionsResponse.json();
 
+    console.log(questions.results);
+
     questions.results.forEach(question => {
       options = [];
       const correctAnswer = new Option(question.correct_answer.trim()).save();
@@ -40,7 +42,10 @@ window.onload = ("DOMContentLoaded", () => {
         options.push(new Option(incorrectAnswer.trim()).save());
       });
 
-      const inputQuestion = new Question(question.question, options, correctAnswer.id).save();
+      difficulty = question.difficulty === "easy" ? 0 : question.difficulty === "medium" ? 1 : 2;
+      console.log(difficulty);
+
+      const inputQuestion = new Question(question.question, options, correctAnswer.id, difficulty).save();
       quiz.addQuestion(inputQuestion);
       newQuestion.call(inputQuestion);
     });
@@ -67,7 +72,7 @@ window.onload = ("DOMContentLoaded", () => {
       let question = Question.load(questionID);
       question.addOption(option);
 
-      newOption.call(option, questionID);
+      newOption.call(option, question);
     }
 
     if (e.target.id === "remove-question") {
@@ -93,10 +98,12 @@ window.onload = ("DOMContentLoaded", () => {
       const questionText = question.querySelector("input[type=text]").value;
       const options = question.querySelectorAll(".option");
       const correctAnswer = question.querySelector("input[type=radio]:checked").id;
+      const difficulty = question.querySelector("#dificulty").value;
 
       let newQuestion = Question.load(questionID);
       newQuestion.questionText = questionText;
       newQuestion.correctAnswer = correctAnswer;
+      newQuestion.difficulty = difficulty;
 
       options.forEach(option => {
         const optionID = option.querySelector("label").getAttribute("value");
@@ -130,12 +137,19 @@ window.onload = ("DOMContentLoaded", () => {
     const newQuestion = document.createElement("div");
     newQuestion.classList.add(`question-${this.id}`, "question");
     newQuestion.innerHTML = `
-      <label>Question</label>
-      <input type="text" value="${this.questionText}" placeholder="Question">
-      <button id="remove-question">Remove Question</button>
+      <div class="question-inputs">
+        <label>Question</label>
+        <input type="text" value="${this.questionText}" placeholder="Question">
+        <select id="dificulty">
+        <option value="0" ${this.difficulty == 0 ? "selected" : ""}>Easy</option>
+        <option value="1" ${this.difficulty == 1 ? "selected" : ""}>Medium</option>
+          <option value="2" ${this.difficulty == 2 ? "selected" : ""}>Hard</option>
+        </select>
+        <button id="remove-question" class="button">Remove Question</button>
+      </div>
       <h3>Options</h3>
       <div class="options">
-        <button id="add-option">Add Option</button>
+        <button id="add-option" class="button">Add Option</button>
       </div>
     `;
 
@@ -157,9 +171,12 @@ window.onload = ("DOMContentLoaded", () => {
     const option = document.createElement("div");
     option.classList.add("option");
     option.innerHTML = `
-      <input type="radio" name="correct-answer-${question.id}" id="${this.id}" ${correctAnswer ? "checked" : ""}>
-      <label value="${this.id}">Value</label>
-      <input type="text" value="${this.value}" placeholder="Value">
+      <div class="option-${this.id} option">
+        <input type="radio" name="correct-answer-${question.id}" id="${this.id}" ${correctAnswer ? "checked" : ""}>
+        <label value="${this.id}">Value</label>
+        <input type="text" value="${this.value}" placeholder="Value">
+        <p class="button remove-option">Remove Option</p>
+      </div>
     `;
 
     options.insertBefore(option, document.querySelector(`.question-${question.id} #add-option`));

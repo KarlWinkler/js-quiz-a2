@@ -18,15 +18,10 @@ class UserQuiz {
   }
 
   complete() {
-    console.log("complete");
+    this.scores.push(this.currentScore);
     this.answeredQuestions = [];
     this.currentQuestion = null;
     this.currentScore = 0;
-    this.setScore();
-  }
-
-  setScore() {
-    this.scores.push(this.currentScore);
     this.save();
   }
 
@@ -68,8 +63,6 @@ class UserQuiz {
   }
 
   static find(user, quiz) {
-    console.log("user", user);
-    console.log("quiz", quiz);
     for (const key in localStorage) {
       if(key.includes("userquiz-")) {
         const userQuiz = JSON.parse(localStorage.getItem(key));

@@ -6,14 +6,31 @@
 
   <link rel="stylesheet" href="styles/app.css">
   <link rel="stylesheet" href="styles/quiz_list.css">
+
+  <link rel="icon" type="image/x-icon" href="/images/favicon.png">
 </head>
 <body>
-  <h1>Quiz List</h1>
-  <div id="quiz-list" class="grid"></div>
-  <a href="/">Home</a>
+  <div class="nav">
+    <div class="nav-links">
+      <a class="button" href="/">Home</a>
+      <a class="button" href="quiz-list">Quiz List</a>
+      <a class="button" id="create-quiz" href="create-quiz">Create Quiz</a>
+    </div>
+    <div class="nav-user">
+      <span id="user">Guest</span>
+      <a class="button" id="nav-login">Log In</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1>Quiz List</h1>
+    <div id="quiz-list" class="grid"></div>
+  </div>
 
   <script src="src/Quiz.js"></script>
+  <script src="src/User.js"></script>
   <script src="src/UserQuiz.js"></script>
+  <script src="src/nav.js"></script>
   <script src="src/quizList.js"></script>
 </body>
 </html>

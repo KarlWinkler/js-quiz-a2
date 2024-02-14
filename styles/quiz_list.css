@@ -3,10 +3,21 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
+    color: #4055cb;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    gap: 20px;
+}
+
+.quiz p {
+    margin: 0;
+}
+
+.quiz h2 {
+    margin: 0;
 }
 
 .quiz-image {

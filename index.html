@@ -3,18 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="styles/app.css">
-  <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+  <link rel="stylesheet" href="styles/home.css">
+
+  <link rel="icon" type="image/x-icon" href="/images/favicon.png">  
 </head>
 <body>
-  <a id="create-quiz" href="create-quiz">Create</a>
-  <a href="quiz-list">List</a>
-
   <div>
-    <label>Username</label>
-    <input id="username" type="text" placeholder="username">
-    <button id="login">log in</button>
+    <div class="nav">
+      <div class="nav-links">
+        <a class="button" href="/">Home</a>
+        <a class="button" href="quiz-list">Quiz List</a>
+        <a class="button" id="create-quiz" href="create-quiz">Create Quiz</a>
+      </div>
+      <div class="nav-user">
+        <span id="user">Guest</span>
+        <a class="button" id="nav-login">Log In</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="login">
+        <label>Username</label>
+        <input id="username" type="text" placeholder="username">
+        <a class="button button-secondary" id="login">log in</a class="button-secondary">
+      </div>
+      <div class="note">
+        <p>Log in to save quiz results</p>
+      </div>
+    </div>
+    <div class="reference">
+      Vectors and icons by <a href="https://www.svgrepo.com" target="_blank">SVG Repo</a>
+    </div>
   </div>
   <script src="src/User.js"></script>
+  <script src="src/nav.js"></script>
   <script src="src/home.js"></script>
 </body>
 </html>
